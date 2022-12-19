@@ -13,3 +13,9 @@ $routes->group('student',['namespace' => '\Modules\Student\Controllers'], functi
 	// delete student
 	$routes->delete('delete-student/(:num)', 'StudentController::deleteStudent/$1');
 });
+
+
+$routes->group('api', ['namespace' => '\Modules\Student\Controllers'], function ($routes) {
+
+	$routes->resource('student', ['controller' => 'ApiController']);
+});

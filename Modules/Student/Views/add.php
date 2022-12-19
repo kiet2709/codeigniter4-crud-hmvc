@@ -7,12 +7,23 @@ Thêm sinh viên
 <?= $this->section("styles") ?>
 <style>
   #frm-add-student label.error{
-      color:red;
+    color:red;
+  }
+  .custom-error {
+    color:red;
   }
 </style>
 <?= $this->endSection() ?>
 
 <?= $this->section('body') ?>
+
+<?php
+    if (isset($validation)){
+        // print_r($validation->listErrors());
+    }
+
+?>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         Tạo sinh viên mới
@@ -23,19 +34,34 @@ Thêm sinh viên
         <div class="form-group">
             <label class="control-label col-sm-2" for="name">Name:</label>
             <div class="col-sm-10">
-            <input type="text" class="form-control" required id="name" name="name" placeholder="Enter name">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+            <?php
+                if (isset($validation) && $validation->hasError('name')){
+                    echo '<span class="custom-error">' . $validation->getError('name') . '</span>'  ;
+                }
+            ?>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="email">Email:</label>
             <div class="col-sm-10">
-            <input type="email" class="form-control" required id="email" name="email" placeholder="Enter email">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+            <?php
+                if (isset($validation) && $validation->hasError('email')){
+                    echo '<span class="custom-error">' . $validation->getError('email') . '</span>'  ;
+                }
+            ?>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="phone_number">Phone Number:</label>
             <div class="col-sm-10">
-            <input type="text" class="form-control" required id="phone_number" name="phone_number" placeholder="Enter phone number">
+            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number">
+            <?php
+                if (isset($validation) && $validation->hasError('phone_number')){
+                    echo '<span class="custom-error">' . $validation->getError('phone_number') . '</span>'  ;
+                }
+            ?>
             </div>
         </div>
         <div class="form-group">
@@ -55,12 +81,12 @@ Thêm sinh viên
 <?= $this->endSection() ?>
 
 <?= $this->section("scripts") ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script> -->
 
 <script>
     $(function() {
 
-       $("#frm-add-student").validate();
+    //    $("#frm-add-student").validate();
     });
 </script>
 

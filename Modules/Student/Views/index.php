@@ -49,7 +49,15 @@ Danh sách sinh viên
                         </td>
                         <td>
                             <a href="<?= base_url('student/edit-student/' . $student['id']) ?>" class="btn btn-info">Edit</a>
-                            <a href="<?= base_url('student/delete-student/' . $student['id']) ?>" class="btn btn-danger">Delete</a>
+                            <a href="#" onclick="if(confirm('Are you sure want to delete?')){ 
+                                    $('#frm-delete-student-<?= $student['id'] ?>').submit() 
+                                }" class="btn btn-danger">
+                                Delete
+                            </a>
+
+                            <form id="frm-delete-student-<?= $student['id'] ?>" action="<?= base_url('student/delete-student/'.$student['id']) ?>" method="post">
+                                <input type="hidden" name="_method" value="delete">
+                            </form>
                         </td>
                     </tr>
         <?php

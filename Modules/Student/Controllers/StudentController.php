@@ -37,16 +37,19 @@ class StudentController extends BaseController
 			// messsages
 			$message = [
 				'name' => [
-					'required' => 'Name field is needed'
+					'required' => 'Tên là bắt buộc'
+				],
+				'email' => [
+					'required' => 'Email là bắt buộc'
 				],
 				'phone_number' => [
-					'required' => 'Phone number needed'
+					'required' => 'Số điện thoại là bắt buộc'
 				]
 			];
 
 			if(!$this->validate($rules, $message)){
 
-				return view('\Modules\Student\Views\student_add', [
+				return view('\Modules\Student\Views\add', [
 					'validation' => $this->validator
 				]);
 			}
@@ -99,12 +102,67 @@ class StudentController extends BaseController
     {
         // open a view file for add student page + add submission form
 
-        return view('\Modules\Student\Views\edit');
+		$student_obj = new StudentModel();
+
+		$student = $student_obj->where('id', $id)->first();
+
+		if ($this->request->getMethod() == 'put') {
+
+			$name = $this->request->getVar('name');
+			$email = $this->request->getVar('email');
+			$phone_number = $this->request->getVar('phone_number');
+
+			$image = $this->request->getFile('profile_image');
+
+			$profile_image = $student['profile_image'];
+
+			if (isset($image) && !empty($image->getPath())) {
+
+				$file_name = $image->getName();
+
+				if ($image->move('images', $file_name)) {
+					$profile_image = '/images/' . $file_name;
+				}
+			}
+
+			$data = [
+				'name' => $name,
+				'email' => $email,
+				'phone_number' => $phone_number,
+				'profile_image' => $profile_image
+			];
+
+			$session = session();
+
+			if($student_obj->update($id, $data)){
+				// data saved
+				$session->setFlashdata('success', 'Cập nhật thông tin sinh viên thành công');
+			}else{
+				// error 
+				$session->setFlashdata('error', 'Cập nhật thông tin sinh viên thất bại');
+			}
+
+			return redirect('student');
+		}
+
+		//print_r($student);
+
+        return view('\Modules\Student\Views\edit', [
+			'student' => $student
+		]);
     }
 
     public function deleteStudent($id)
 	{
 		// delete operation of student
-		
+		$student_obj = new StudentModel();
+
+		$student_obj->delete($id);
+
+		$session = session();
+
+		$session->setFlashdata('success', 'Xóa sinh viên thành công');
+
+		return redirect('student');
 	}
 }
